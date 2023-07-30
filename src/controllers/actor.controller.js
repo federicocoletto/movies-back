@@ -3,7 +3,12 @@ const Actor = require("../models/Actor");
 const Movie = require("../models/Movie");
 
 const getAll = catchError(async (req, res) => {
-	const results = await Actor.findAll({ include: [Movie] });
+	const results = await Actor.findAll({
+		include: {
+			model: Movie,
+			attributes: ["name"]
+		},
+	});
 	return res.json(results);
 });
 
@@ -14,7 +19,12 @@ const create = catchError(async (req, res) => {
 
 const getOne = catchError(async (req, res) => {
 	const { id } = req.params;
-	const result = await Actor.findByPk(id, { include: [Movie] });
+	const result = await Actor.findByPk(id, {
+		include: {
+			model: Movie,
+			attributes: ["name"],
+		},
+	});
 	if (!result) return res.sendStatus(400);
 	return res.json(result);
 });
